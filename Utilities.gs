@@ -162,7 +162,8 @@ function checkTickers(closeType)
   var investorEquitySheet;
   
   if(closeType != "Auto") var ui = SpreadsheetApp.getUi();
-
+  
+  SpreadsheetApp.flush();
   
   //Check if sizes match (taking into account new coins)
   if(holdingsRangeSize != pricesRangeSize + numNewCoins || holdingsRangeSize != balancesRangeSize + numNewCoins){

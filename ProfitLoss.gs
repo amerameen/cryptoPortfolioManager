@@ -5,9 +5,10 @@ function WeeklyPL()
   var ss = SpreadsheetApp.getActiveSpreadsheet(); 
   var sheet = ss.getSheetByName("Weekly P&L");
   var weekNum = Utilities.formatDate(new Date(), "GMT", "w"); 
-
+ 
+  
   //Close 
-  Close("Weekly P&L", weekNum);
+  Close("Weekly P&L", "");
   
   //Create New Row for the close and add date
   var lastPLCell = ss.getRangeByName("WPL_LIVE_CELL").getCell(1, 1).offset(1, 0); 
@@ -16,18 +17,25 @@ function WeeklyPL()
   //Copy Old Values to Empty Row
   range = ss.getRangeByName("WPL_LIVE_VALUES").offset(2, 0)
   range.copyTo(range.offset(-1, 0), SpreadsheetApp.CopyPasteType.PASTE_VALUES, false);
+  SpreadsheetApp.flush();  
+
+  weekRange = ss.getRangeByName("WPL_LIVE_CELL").offset(2, 0)
+  weekRange.copyTo(weekRange.offset(-1, 0), SpreadsheetApp.CopyPasteType.PASTE_VALUES, false);
   
-  SpreadsheetApp.flush();
+  SpreadsheetApp.flush();  
   
   //Copy P&L
   range = ss.getRangeByName("WPL_LIVE_VALUES");  
   range.copyTo(range.offset(1, 0), SpreadsheetApp.CopyPasteType.PASTE_VALUES, false);
-  
-  //Week Number
+
+  //Set Actual Week Num
   lastPLCell.setValue(weekNum);
   
+  //Week Number Closes Sheet
+  ss.getRangeByName("C_LIVE").getCell(1, 1).offset(1, 2).setValue(weekNum);
+  
   //Send Email
-  weeklyPLEmail();
+  //weeklyPLEmail();
 }
 
 function weeklyPLEmail(){
